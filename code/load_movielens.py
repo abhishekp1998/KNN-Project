@@ -27,6 +27,14 @@ def load_movielens_data(data_folder_path):
             the element (i, j) should be 0.
     """
     # This is the path to the file you need to load.
-    data_file = os.path.join(data_folder_path, 'u.data')
 
-    raise NotImplementedError()
+    answer = np.zeros((943,1682))
+    data_file = os.path.join(data_folder_path, 'u.data')
+    with open(data_file) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter='\t')
+        for row in csv_reader:
+            answer[int(row[0]) - 1][int(row[1]) - 1] = row[3]
+    
+    return answer
+        
+    

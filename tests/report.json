@@ -1,7 +1,12 @@
 {
-    "score": 0,
-    "tests_passed": 0,
+    "score": 58,
+    "tests_passed": 4,
     "notes": {
-        "test_netid": "FAIL - REQUIRED (automatic zero)"
+        "test_collaborative_filtering": "FAIL",
+        "test_euclidean_distances": "PASS",
+        "test_manhattan_distances": "PASS",
+        "test_cosine_distances": "PASS",
+        "test_aggregators": "FAIL",
+        "test_load_movielens_data": "PASS"
     }
 }

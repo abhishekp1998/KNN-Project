@@ -42,8 +42,9 @@ class KNearestNeighbor():
                 neighbors. Can be one of 'mode', 'mean', or 'median'.
         """
         self.n_neighbors = n_neighbors
+        self.features = None
+        self.targets = None 
 
-        raise NotImplementedError()
 
 
     def fit(self, features, targets):
@@ -62,8 +63,8 @@ class KNearestNeighbor():
                 n_dimensions).
         """
 
-        raise NotImplementedError()
-        
+        self.features = features
+        self.targets = targets         
 
     def predict(self, features, ignore_first=False):
         """Predict from features, a numpy array of size (n_samples, n_features) Use the
