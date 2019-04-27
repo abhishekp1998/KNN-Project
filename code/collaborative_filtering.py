@@ -63,4 +63,19 @@ def collaborative_filtering(input_array, n_neighbors,
         imputed_array {np.ndarray} -- An array of shape (n_samples, n_features) with imputed
             values for any zeros in the original input_array.
     """
-    raise NotImplementedError()
+
+    model = KNearestNeighbor(n_neighbors, distance_measure, aggregator)
+    model.fit(input_array,input_array)
+    predictions = model.predict(input_array, ignore_first= 'true')
+    
+    count = 0
+    for row in input_array:
+        for i in range(len(row)):
+            if (row[i] == 0):
+                row[i] = predictions[count][i]
+        count += 1
+    
+    return input_array
+               
+
+

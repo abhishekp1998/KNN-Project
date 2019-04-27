@@ -42,6 +42,8 @@ class KNearestNeighbor():
                 neighbors. Can be one of 'mode', 'mean', or 'median'.
         """
         self.n_neighbors = n_neighbors
+        self.distance_measure = distance_measure
+        self.aggregator = aggregator
         self.features = None
         self.targets = None 
 
@@ -87,4 +89,94 @@ class KNearestNeighbor():
             labels {np.ndarray} -- Labels for each data point, of shape (n_samples,
                 n_features)
         """
-        raise NotImplementedError()
+        Knearest = self.n_neighbors
+        labels = None
+        neighbors = None 
+        targets = self.targets
+        agg = self.aggregator
+        NN = None
+
+        if(ignore_first):
+            Knearest += 1
+        
+        if (self.distance_measure == 'cosine'):
+            neighbors = cosine_distances(features, self.features)
+
+        elif (self.distance_measure == 'manhattan'):
+            neighbors = manhattan_distances(features, self.features)
+
+        else :
+            neighbors = euclidean_distances(features,self.features)
+        
+        neighbors = np.argsort(neighbors, axis = 1)
+        
+        megalist = []
+
+        for row in neighbors:
+            innerlist = []
+            for i in range(Knearest):
+                innerlist.append(row[i])
+            megalist.append(innerlist)
+
+        NN = np.asarray(megalist)
+        newTargets = None 
+
+        outerlist = []
+        for row in NN:
+            innerlist = []
+            for i in row: 
+                innerlist.append(targets[i])
+            outerlist.append(innerlist)
+        
+        newTargets = np.asarray(outerlist)
+
+        outerlist = []
+
+        for row in newTargets:
+            if(agg == 'median'):
+                outerlist.append(self.median(row))
+
+            elif(agg == 'mean'):
+                outerlist.append(self.mean(row))
+
+            else:
+                outerlist.append(self.mode(row))
+        
+        labels = np.asarray(outerlist)
+        return labels
+
+
+    def mode(self,targetList):
+        trans = np.transpose(targetList)
+        templist = []
+        for row in trans:
+            unique = np.unique(row, return_counts = 'true')
+            most = np.argmax(unique[1])
+            most = unique[0][most]
+            templist.append(most)
+        return np.asarray(templist)
+        
+
+
+
+    def mean(self,targetList):
+        return np.mean(targetList, axis = 0)
+    
+    def median(self,targetList):
+        return np.median(targetList,axis = 0)
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
